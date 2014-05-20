@@ -10,5 +10,7 @@ A jQuery based demo app for Google Maps
 * Clone your fork
 * rake db:create
 
+#How
 
+*  jquery plugin Gmap3: [http://gmap3.net/](http://gmap3.net/)
 

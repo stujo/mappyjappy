@@ -6,6 +6,7 @@
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 </head>
 <body>
 <!-- Fixed navbar -->
@@ -32,6 +33,14 @@
 <div class="container">
   <%= yield %>
 </div>
+
+
+<script type="text/javascript">
+    google.load("maps", "3", {other_params:'sensor=false&language=en', callback: function(){
+        console.log('Google Maps Loaded');
+        window.secret_agents.init_maps('.secret_agent_map');
+    }});
+</script>
 
 </body>
 </html>

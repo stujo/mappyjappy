@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  root 'maps#home'
   resources :secret_agents
 
   # The priority is based upon order of creation: first created -> highest priority.
