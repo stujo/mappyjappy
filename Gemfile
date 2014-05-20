@@ -49,6 +49,8 @@ end
 
 gem 'bootstrap-sass'
 
+gem "twitter-bootstrap-rails"
+
 group :development do
   gem 'quiet_assets'
   gem 'better_errors'

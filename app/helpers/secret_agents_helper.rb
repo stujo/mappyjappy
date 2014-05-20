@@ -1,0 +1,2 @@
+module SecretAgentsHelper
+end
