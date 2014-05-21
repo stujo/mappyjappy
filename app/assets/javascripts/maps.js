@@ -89,7 +89,6 @@ $(document).ready(function () {
       // Allow each marker to have an info window
       google.maps.event.addListener(marker, 'click', function () {
         var info_window = jMap.data('google_map_info_window');
-        //info_window.setPosition(marker.position);
         info_window.setContent(agent_info_content(agent));
         info_window.open(google_map, this);
       });
