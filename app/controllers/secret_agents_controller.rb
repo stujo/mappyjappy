@@ -9,7 +9,15 @@ class SecretAgentsController < ApplicationController
 
   def update_location
     @secret_agent = current_secret_agent
+
+    puts "Update Location (1) #{@secret_agent.address} (#{@secret_agent.latitude} #{@secret_agent.longitude})"
+
+    puts update_location_params
+
     @secret_agent.update_attributes update_location_params
+
+    puts "Update Location (2) #{@secret_agent.address} (#{@secret_agent.latitude} #{@secret_agent.longitude})"
+
     render :json => {}
   end
 

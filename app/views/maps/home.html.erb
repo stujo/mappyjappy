@@ -2,7 +2,7 @@
     console.log('Requesting Current Location');
     navigator.geolocation.getCurrentPosition(function (position) {
         console.log('Saving Current Location and load nearby agents');
-        window.secret_agents.maps.load_nearby_agents($('.secret_agent_map'), position.coords.latitude, position.coords.longitude);
+        window.secret_agents.maps.load_nearby_agents($('#secret_agent_main_map'), position.coords.latitude, position.coords.longitude);
     });
 </script>
 <div id="secret_overlay" style="display: block">
@@ -32,7 +32,7 @@
                         other_params: 'sensor=false&language=en',
                         callback: function () {
                             console.log('Google Maps Loaded');
-                            window.secret_agents.maps.google_maps_ready($('.secret_agent_map'));
+                            window.secret_agents.maps.google_maps_ready($('#secret_agent_main_map'));
                         }
                     }
             );
