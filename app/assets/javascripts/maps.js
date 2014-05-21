@@ -151,6 +151,10 @@ $(document).ready(function () {
           reset_bounds_to_include_markers(jMap);
         });
 
+        // Install a click handler to redo the search and send a new location
+        google.maps.event.addListener(map, 'click', function(event) {
+          window.secret_agents.maps.load_nearby_agents(jMap, event.latLng.lat(), event.latLng.lng());
+        });
 
       }
       else {
