@@ -32,7 +32,7 @@
               <%= link_to('Login', new_secret_agent_session_path) %>
             </li>
             <li>
-              <%= link_to('Register', new_secret_agent_registration_path)  %>
+              <%= link_to('Register', new_secret_agent_registration_path) %>
             </li>
         <% end %>
       </ul>
@@ -40,11 +40,12 @@
     <!--/.nav-collapse -->
   </div>
 </div>
-
-<p class="notice"><%= notice %></p>
-
-<p class="alert"><%= alert %></p>
-
+<% flash.each do |type, message| %>
+    <div class="alert <%= bootstrap_class_for(type) %> alert-dismissable fade in">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+<% end %>
 <div class="container">
   <%= yield %>
 </div>

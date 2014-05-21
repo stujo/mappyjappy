@@ -8,3 +8,17 @@
   height: 300px;
   width: 300px;
 }
+
+@media (min-width: 768px){
+  .secret_agent_map {
+    height: 400px;
+    width: 600px;
+  }
+}
+
+@media (max-width: 320px) {
+  .secret_agent_map {
+    height: 300px;
+    width: 300px;
+  }
+}

@@ -191,7 +191,7 @@ $(document).ready(function () {
 
       setTimeout(function() {
         send_updated_location(lat, lng);
-      }, 1);
+      }, 1000);
 
       selected.each(function () {
         var jMap = $(this);
