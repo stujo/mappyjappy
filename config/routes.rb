@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   root 'maps#home'
-  resources :secret_agents
+  resources :secret_agents do
+    get 'near.:format', :action => :near, :constraints => {:format => /json/}, on: :collection, :as => :near
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

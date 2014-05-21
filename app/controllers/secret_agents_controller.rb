@@ -7,6 +7,12 @@ class SecretAgentsController < ApplicationController
     @secret_agents = SecretAgent.all
   end
 
+  # GET /secret_agents/near.json
+  def near
+    @secret_agents = geo_search_params_to_scope
+    render :index, :as => :json
+  end
+
   # GET /secret_agents/1
   # GET /secret_agents/1.json
   def show
@@ -62,13 +68,28 @@ class SecretAgentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_secret_agent
-      @secret_agent = SecretAgent.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_secret_agent
+    @secret_agent = SecretAgent.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def secret_agent_params
-      params.require(:secret_agent).permit(:codename, :address, :latitude, :longitude)
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def secret_agent_params
+    params.require(:secret_agent).permit(:codename, :address, :latitude, :longitude)
+  end
+
+
+  def geo_search_params_to_scope
+    near_scope = SecretAgent.none
+    defaults = {:miles => 20}
+    search = defaults.merge(params.permit(:miles, :lat, :lng))
+    search.symbolize_keys!
+
+    if (search.has_key?(:lat) && search.has_key?(:lng))
+      if(search[:miles] > 0)
+        near_scope = SecretAgent.near([search[:lat], search[:lng]], search[:miles])
+      end
     end
+    near_scope
+  end
 end

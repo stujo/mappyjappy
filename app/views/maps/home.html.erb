@@ -1,5 +1,29 @@
+<script type="text/javascript">
+    console.log('Requesting Current Location');
+    navigator.geolocation.getCurrentPosition(function (position) {
+        console.log('Saving Current Location and load nearby agents');
+        window.secret_agents.maps.load_nearby_agents('.secret_agent_map', position.coords.latitude,  position.coords.longitude);
+    });
+</script>
+
 <div id="secret_agent_main_map" class="secret_agent_map"></div>
 
-
+<script type="text/javascript">
+    google.load("maps", "3",
+            {
+                other_params: 'sensor=false&language=en', callback: function () {
+                console.log('Google Maps Loaded');
+                window.secret_agents.maps.google_maps_ready('.secret_agent_map');
+//
+//
+//        // Setup Map For Current Location
+//        navigator.geolocation.getCurrentPosition(function (position) {
+//            var user_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//            window.secret_agents.maps.init_maps('.secret_agent_map', user_location, window.secret_agents.maps.show_nearby_agents);
+//        })
+            }
+            }
+    );
+</script>
 
 

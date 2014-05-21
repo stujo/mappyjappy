@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require gmap3-6.0.0/gmap3
 //= require_tree .
 
 window.secret_agents = window.secret_agents || {};
