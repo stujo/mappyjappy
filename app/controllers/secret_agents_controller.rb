@@ -1,70 +1,16 @@
 class SecretAgentsController < ApplicationController
   before_action :set_secret_agent, only: [:show, :edit, :update, :destroy]
 
-  # GET /secret_agents
-  # GET /secret_agents.json
-  def index
-    @secret_agents = SecretAgent.all
-  end
-
   # GET /secret_agents/near.json
   def near
-    @secret_agents = geo_search_params_to_scope
+    @secret_agents = geo_search_params_to_scope.where.not(id: current_secret_agent.id)
     render :index, :as => :json
   end
 
-  # GET /secret_agents/1
-  # GET /secret_agents/1.json
-  def show
-  end
-
-  # GET /secret_agents/new
-  def new
-    @secret_agent = SecretAgent.new
-  end
-
-  # GET /secret_agents/1/edit
-  def edit
-  end
-
-  # POST /secret_agents
-  # POST /secret_agents.json
-  def create
-    @secret_agent = SecretAgent.new(secret_agent_params)
-
-    respond_to do |format|
-      if @secret_agent.save
-        format.html { redirect_to @secret_agent, notice: 'Secret agent was successfully created.' }
-        format.json { render :show, status: :created, location: @secret_agent }
-      else
-        format.html { render :new }
-        format.json { render json: @secret_agent.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /secret_agents/1
-  # PATCH/PUT /secret_agents/1.json
-  def update
-    respond_to do |format|
-      if @secret_agent.update(secret_agent_params)
-        format.html { redirect_to @secret_agent, notice: 'Secret agent was successfully updated.' }
-        format.json { render :show, status: :ok, location: @secret_agent }
-      else
-        format.html { render :edit }
-        format.json { render json: @secret_agent.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /secret_agents/1
-  # DELETE /secret_agents/1.json
-  def destroy
-    @secret_agent.destroy
-    respond_to do |format|
-      format.html { redirect_to secret_agents_url, notice: 'Secret agent was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+  def update_location
+    @secret_agent = current_secret_agent
+    @secret_agent.update_attributes update_location_params
+    render :json => {}
   end
 
   private
@@ -78,6 +24,10 @@ class SecretAgentsController < ApplicationController
     params.require(:secret_agent).permit(:codename, :address, :latitude, :longitude)
   end
 
+  def update_location_params
+    params.require(:secret_agent).permit(:latitude, :longitude)
+  end
+
 
   def geo_search_params_to_scope
     near_scope = SecretAgent.none
@@ -86,7 +36,7 @@ class SecretAgentsController < ApplicationController
     search.symbolize_keys!
 
     if (search.has_key?(:lat) && search.has_key?(:lng))
-      if(search[:miles] > 0)
+      if (search[:miles] > 0)
         near_scope = SecretAgent.near([search[:lat], search[:lng]], search[:miles])
       end
     end
