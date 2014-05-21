@@ -20,16 +20,23 @@
 
   <div class="secret_agent_map_label">Nearby Secret Agents</div>
 </div>
-<script type="text/javascript">
-    google.load("maps", "3",
-            {
-                other_params: 'sensor=false&language=en',
-                callback: function () {
-                    console.log('Google Maps Loaded');
-                    window.secret_agents.maps.google_maps_ready($('.secret_agent_map'));
-                }
-            }
-    );
-</script>
 
+<script type="text/javascript">
+    $.ajax({
+        url: '//www.google.com/jsapi',
+        dataType: 'script',
+        cache: true,
+        success: function () {
+            google.load("maps", "3",
+                    {
+                        other_params: 'sensor=false&language=en',
+                        callback: function () {
+                            console.log('Google Maps Loaded');
+                            window.secret_agents.maps.google_maps_ready($('.secret_agent_map'));
+                        }
+                    }
+            );
+        }
+    });
+</script>
 
