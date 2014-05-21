@@ -17,7 +17,6 @@ class SecretAgent < ActiveRecord::Base
 
   before_validation :ensure_codename
 
-
   def ensure_codename
     self.codename = SecureRandom.hex(6) unless self.codename
   end
