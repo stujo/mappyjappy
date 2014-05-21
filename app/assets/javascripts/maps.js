@@ -5,8 +5,7 @@ $(document).ready(function () {
 
   // Private Functions
 
-  function clear_map_markers(map) {
-    var jMap = $(map);
+  function clear_map_markers(jMap) {
     var markers = jMap.data('google_markers');
     if (markers) {
       jQuery.each(markers, function () {
@@ -18,18 +17,19 @@ $(document).ready(function () {
   }
 
 
-  function set_current_location_marker(map, position) {
-    var jMap = $(map);
+  function set_current_location_marker(jMap, position) {
     var marker = jMap.data('google_current_location_marker');
     if (marker) {
       marker.setMap(null);
     }
 
+    var google_map = jMap.data('google_map');
+
     var icon = "http://maps.google.com/mapfiles/ms/icons/" + 'green' + ".png";
 
     marker = new google.maps.Marker({
       position: position,
-      map: map,
+      map: google_map,
       animation: google.maps.Animation.DROP,
       title: 'You',
       icon: new google.maps.MarkerImage(icon)
@@ -37,8 +37,9 @@ $(document).ready(function () {
     jMap.data('google_current_location_marker', marker);
   }
 
-  function reset_bounds_to_include_markers(map) {
-    var jMap = $(map);
+  function reset_bounds_to_include_markers(jMap) {
+
+    var google_map = jMap.data('google_map');
 
     // Keep Track of bounds
     var bounds = new google.maps.LatLngBounds();
@@ -58,34 +59,40 @@ $(document).ready(function () {
       bounds.extend(this.position);
     });
 
-    map.fitBounds(bounds);
+    google_map.fitBounds(bounds);
   }
 
-  function set_agents_as_markers(map, data) {
-    var jMap = $(map);
+  function agent_info_content(agent) {
+    return '<div class="agent_info"><h1>Agent: ' + agent.codename + '</h1><p>' + agent.address + '</p>';
+  }
+
+  function set_agents_as_markers(jMap, data) {
 
     var markers = jMap.data('google_markers');
     if (!markers) {
       markers = [];
     }
 
+    var google_map = jMap.data('google_map');
+
     // Add Marker for Each Agent
     jQuery.each(data, function () {
+      var agent = this;
       var position = new google.maps.LatLng(this.latitude, this.longitude);
       var marker = new google.maps.Marker({
         position: position,
-        map: map,
+        map: google_map,
         animation: google.maps.Animation.DROP,
-        title: this.codename
+        title: agent.codename
       });
 
-//      // Allow each marker to have an info window
-//      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//        return function() {
-//          infoWindow.setContent(infoWindowContent[i][0]);
-//          infoWindow.open(map, marker);
-//        }
-//      })(marker, i));
+      // Allow each marker to have an info window
+      google.maps.event.addListener(marker, 'click', function () {
+        var info_window = jMap.data('google_map_info_window');
+        //info_window.setPosition(marker.position);
+        info_window.setContent(agent_info_content(agent));
+        info_window.open(google_map, this);
+      });
 
       // Automatically center the map fitting all markers on the screen
       markers.push(marker);
@@ -113,7 +120,7 @@ $(document).ready(function () {
         var map_options = {
           center: position,
           zoom: 15,
-          draggable: true,
+          draggable: false,
           keyboardShortcuts: false,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapTypeControl: false,
@@ -123,12 +130,15 @@ $(document).ready(function () {
         };
 
         var map = new google.maps.Map(dom_element, map_options);
-        $(this).data('google_map', map);
+        jMap.data('google_map', map);
 
-        clear_map_markers(map);
-        set_current_location_marker(map, position);
-        set_agents_as_markers(map, agents);
-        reset_bounds_to_include_markers(map);
+        var info_window = new google.maps.InfoWindow();
+        jMap.data('google_map_info_window', info_window);
+
+        clear_map_markers(jMap);
+        set_current_location_marker(jMap, position);
+        set_agents_as_markers(jMap, agents);
+        reset_bounds_to_include_markers(jMap);
       }
       else {
         console.log("Map Data Not Yet Ready");
@@ -139,10 +149,9 @@ $(document).ready(function () {
     }
   }
 
-  function render_maps(selector) {
-    var selected = $(selector);
-    if (selected.length > 0) {
-      selected.each(function () {
+  function render_maps(maps) {
+    if (maps.length > 0) {
+      maps.each(function () {
         render_map_if_ready($(this));
       });
     }
@@ -185,32 +194,12 @@ $(document).ready(function () {
       });
     },
 
-    google_maps_ready: function (selector) {
+    google_maps_ready: function (maps) {
       google_maps_loaded = true;
-      render_maps(selector);
-    },
-
-    show_nearby_agents: function (map) {
-      var lat_lng = map.getCenter();
-      var data_params = {'lat': lat_lng.lat(), 'lng': lat_lng.lng() };
-      clear_map_markers(map);
-      set_current_location_marker(map, lat_lng);
-
-      $.ajax({
-        dataType: 'json',
-        url: '/secret_agents/near.json',
-        data: data_params,
-        error: function (request, status, error) {
-          set_error('Unable to retrieve data from ' + url + ' : ' + request.responseJSON.message);
-        },
-        success: function (data) {
-          set_agents_as_markers(map, data);
-          reset_bounds_to_include_markers(map);
-        }
-      });
+      render_maps(maps);
     }
   };
 
-  console.log('Maps Js Loaded and Intialized');
+  console.log('Maps Js Loaded and Initialized');
 })
 ;
