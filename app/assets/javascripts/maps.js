@@ -101,6 +101,10 @@ $(document).ready(function () {
     jMap.data('google_markers', markers);
   }
 
+  function hide_secret_overlay() {
+    $('#secret_overlay').hide();
+  }
+
 
   function render_map_if_ready(jMap) {
     if (google_maps_loaded) {
@@ -139,6 +143,15 @@ $(document).ready(function () {
         set_current_location_marker(jMap, position);
         set_agents_as_markers(jMap, agents);
         reset_bounds_to_include_markers(jMap);
+
+        hide_secret_overlay();
+
+        $(window).on('resize', function () {
+          google.maps.event.trigger(map, 'resize');
+          reset_bounds_to_include_markers(jMap);
+        });
+
+
       }
       else {
         console.log("Map Data Not Yet Ready");
@@ -157,9 +170,8 @@ $(document).ready(function () {
     }
   }
 
-  function send_updated_location(lat, lng)
-  {
-    var data_params = {'secret_agent' : {'latitude' : lat, 'longitude' : lng }};
+  function send_updated_location(lat, lng) {
+    var data_params = {'secret_agent': {'latitude': lat, 'longitude': lng }};
     $.ajax({
       dataType: 'json',
       type: 'post',
@@ -173,6 +185,7 @@ $(document).ready(function () {
       }
     });
   }
+
 
   var google_maps_loaded = false;
 
@@ -189,7 +202,7 @@ $(document).ready(function () {
     load_nearby_agents: function (selector, lat, lng) {
       var selected = $(selector);
 
-      setTimeout(function() {
+      setTimeout(function () {
         send_updated_location(lat, lng);
       }, 1000);
 

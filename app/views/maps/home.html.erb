@@ -5,12 +5,21 @@
         window.secret_agents.maps.load_nearby_agents($('.secret_agent_map'), position.coords.latitude, position.coords.longitude);
     });
 </script>
+<div id="secret_overlay" style="display: block">
+  <h1>Searching...</h1>
 
-<h1 class="page_heading">Nearby Secret Agents</h1>
-<h1 class="page_heading"><%= @secret_agent.codename %></h1>
+  <h1>Please Wait</h1>
+</div>
 
-<div id="secret_agent_main_map" class="secret_agent_map"></div>
+<div class="secret_dashboard">
+  <h1 class="page_heading">Welcome <%= @secret_agent.codename %></h1>
 
+  <div class="secret_agent_map_container">
+    <div id="secret_agent_main_map" class="secret_agent_map"></div>
+  </div>
+
+  <div class="secret_agent_map_label">Nearby Secret Agents</div>
+</div>
 <script type="text/javascript">
     google.load("maps", "3",
             {
