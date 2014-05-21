@@ -157,6 +157,22 @@ $(document).ready(function () {
     }
   }
 
+  function send_updated_location(lat, lng)
+  {
+    var data_params = {'secret_agent' : {'latitude' : lat, 'longitude' : lng }};
+    $.ajax({
+      dataType: 'json',
+      type: 'post',
+      url: '/secret_agents/update_location',
+      data: data_params,
+      error: function (request, status, error) {
+        console.log('Unable to update Agent Location');
+      },
+      success: function (data) {
+        console.log('Agent Location Updated');
+      }
+    });
+  }
 
   var google_maps_loaded = false;
 
@@ -172,6 +188,10 @@ $(document).ready(function () {
      */
     load_nearby_agents: function (selector, lat, lng) {
       var selected = $(selector);
+
+      setTimeout(function() {
+        send_updated_location(lat, lng);
+      }, 1);
 
       selected.each(function () {
         var jMap = $(this);

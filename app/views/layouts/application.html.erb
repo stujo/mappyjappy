@@ -23,12 +23,27 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><%= link_to 'Secret Agents', secret_agents_path %></li>
+        <% if secret_agent_signed_in? %>
+            <li>
+              <%= link_to('Logout', destroy_secret_agent_session_path) %>
+            </li>
+        <% else %>
+            <li>
+              <%= link_to('Login', new_secret_agent_session_path) %>
+            </li>
+            <li>
+              <%= link_to('Register', new_secret_agent_registration_path)  %>
+            </li>
+        <% end %>
       </ul>
     </div>
     <!--/.nav-collapse -->
   </div>
 </div>
+
+<p class="notice"><%= notice %></p>
+
+<p class="alert"><%= alert %></p>
 
 <div class="container">
   <%= yield %>
