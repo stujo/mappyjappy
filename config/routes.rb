@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
 
-  devise_for :secret_agent
-
   root 'maps#home'
-  resources :secret_agents do
-    get 'near.:format', :action => :near, :constraints => {:format => /json/}, on: :collection, :as => :near
-    post 'update_location', :action => :update_location, :constraints => {:format => /json/}, on: :collection, :as => :update_location
-  end
+
+  get 'near', to: "secret_agents#near", :constraints => {:format => /json/}
+  post 'update_location', to: "secret_agents#update_location", :constraints => {:format => /json/}
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

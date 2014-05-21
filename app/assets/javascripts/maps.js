@@ -163,7 +163,7 @@ $(document).ready(function () {
     $.ajax({
       dataType: 'json',
       type: 'post',
-      url: '/secret_agents/update_location',
+      url: '/update_location',
       data: data_params,
       error: function (request, status, error) {
         console.log('Unable to update Agent Location');
@@ -199,7 +199,7 @@ $(document).ready(function () {
         jMap.data('current_location', data_params);
         $.ajax({
           dataType: 'json',
-          url: '/secret_agents/near.json',
+          url: '/near',
           data: data_params,
           error: function (request, status, error) {
             jMap.data('nearby_agents', null);

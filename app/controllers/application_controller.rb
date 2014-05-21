@@ -4,8 +4,19 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter do
-    fail "bad ancestor" unless self.kind_of?(Devise::Controllers::Helpers)
-    fail "no mapping" unless Devise.class_variable_get(:@@mappings)[:secret_agent]
-    authenticate_secret_agent!
+    ensure_secret_agent
+  end
+
+  def current_secret_agent
+    @secret_agent
+  end
+
+  def ensure_secret_agent
+    if cookies[:codename]
+       @secret_agent = SecretAgent.find_or_create_by(:codename => cookies[:codename])
+    else
+      @secret_agent = SecretAgent.create()
+      cookies[:codename] = @secret_agent.codename
+    end
   end
 end

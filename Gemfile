@@ -63,9 +63,6 @@ end
 
 gem "geocoder"
 
-gem "devise"
-
-
 
 
 
