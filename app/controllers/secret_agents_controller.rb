@@ -33,7 +33,7 @@ class SecretAgentsController < ApplicationController
 
   def geo_search_params_to_scope
     near_scope = SecretAgent.none
-    defaults = {:miles => 20}
+    defaults = {:miles => 5}
     search = defaults.merge(params.permit(:miles, :lat, :lng))
     search.symbolize_keys!
 

@@ -38,6 +38,8 @@ $(document).ready(function () {
       icon: new google.maps.MarkerImage(icon)
     });
     map_container.data('google_current_location_marker', marker);
+
+    ensure_search_circle(map_container);
   }
 
   function reset_bounds_to_include_markers(map_container) {
@@ -129,18 +131,82 @@ $(document).ready(function () {
     return info_window;
   }
 
+  function ensure_search_circle(map_container) {
+    var search_radius = 5; //Miles
+    var search_radius_google = search_radius * 1600;
+    var position = current_position(map_container);
+
+    var google_map = ensure_google_map(map_container);
+
+    var search_circle = map_container.data('google_map_search_circle');
+
+    if(search_circle)
+    {
+      search_circle.setMap(null);
+    }
+
+    search_circle = new google.maps.Circle({
+      center: position,
+      radius: search_radius_google,
+      strokeColor: "#0000FF",
+      strokeOpacity: 0.25,
+      strokeWeight: 1,
+      fillColor: "#0000FF",
+      fillOpacity: 0.1,
+      map: google_map
+    });
+
+    // Pass-through Events
+    google.maps.event.addListener(search_circle, "click", function (event) {
+      google.maps.event.trigger(google_map, 'click', event);
+    });
+
+    map_container.data('google_map_search_circle', search_circle);
+
+    return search_circle;
+
+  }
+
+  function current_position(map_container) {
+    var current_location = map_container.data('current_location');
+    return new google.maps.LatLng(current_location.lat, current_location.lng);
+  }
 
   function ensure_google_map(map_container) {
     var google_map = map_container.data('google_map');
 
     if (!google_map) {
 
-      var current_location = map_container.data('current_location');
-      var position = new google.maps.LatLng(current_location.lat, current_location.lng);
+      var position = current_position(map_container);
 
       var dom_element = map_container[0];
 
+      var styles = [
+//        {
+//          stylers: [
+//            { hue: "#00ffe6" },
+//            { saturation: -20 }
+//          ]
+//        },
+        {
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [
+            { lightness: 100 },
+            { visibility: "simplified" }
+          ]
+        },
+        {
+          featureType: "road",
+          elementType: "labels",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ];
+
       var map_options = {
+        styles: styles,
         center: position,
         zoom: 15,
         draggable: true,
@@ -149,7 +215,14 @@ $(document).ready(function () {
         mapTypeControl: false,
         navigationControl: false,
         scrollwheel: true,
-        streetViewControl: false
+        maxZoom: 12,
+        minZoom: 8,
+        panControl: false,
+        streetViewControl: false,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.LARGE,
+          position: google.maps.ControlPosition.LEFT_CENTER
+        }
       };
 
       google_map = new google.maps.Map(dom_element, map_options);
@@ -166,8 +239,8 @@ $(document).ready(function () {
         window.secret_agents.maps.load_nearby_agents(map_container, event.latLng.lat(), event.latLng.lng());
       });
 
-      return google_map;
     }
+    return google_map;
   }
 
   // If we have something that can be redrawn do it
