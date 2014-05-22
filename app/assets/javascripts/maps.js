@@ -248,7 +248,7 @@ $(document).ready(function () {
     }
     return google_map;
   }
-  
+
   function debug_log(object)
   {
     // console.log(object);
@@ -308,6 +308,7 @@ $(document).ready(function () {
 // Expose Our Public API
   window.secret_agents.maps = {
 
+    debug_log: debug_log,
     /*
      Reload the nearby agents via json and store them in the
      containers data('nearby_agents')
