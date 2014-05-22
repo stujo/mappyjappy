@@ -248,12 +248,17 @@ $(document).ready(function () {
     }
     return google_map;
   }
+  
+  function debug_log(object)
+  {
+    // console.log(object);
+  }
 
   // If we have something that can be redrawn do it
   // We can't render until google_maps_loaded is true
   // And we need a current_location and nearby_agents
   function update_map_display(map_container) {
-    console.log('update_map_display');
+    debug_log('update_map_display');
     if (google_maps_loaded) {
       var agents = map_container.data('nearby_agents');
       var current_location = map_container.data('current_location');
@@ -268,18 +273,18 @@ $(document).ready(function () {
 
         hide_secret_overlay();
       } else {
-        console.log("Map Data Not Yet Ready");
+        debug_log("Map Data Not Yet Ready");
       }
     } else {
-      console.log("Google Maps Not Yet Ready");
+      debug_log("Google Maps Not Yet Ready");
     }
   }
 
   function send_updated_location(lat, lng) {
     var data_params = {'secret_agent': {'latitude': lat, 'longitude': lng }};
 
-    console.log('Sending Updated Location');
-    console.log(data_params);
+    debug_log('Sending Updated Location');
+    debug_log(data_params);
 
     $.ajax({
       dataType: 'json',
@@ -287,10 +292,10 @@ $(document).ready(function () {
       url: '/update_location',
       data: data_params,
       error: function (request, status, error) {
-        console.log('Unable to update Agent Location');
+        debug_log('Unable to update Agent Location');
       },
       success: function (data) {
-        console.log('Agent Location Updated');
+        debug_log('Agent Location Updated');
       }
     });
   }
@@ -340,5 +345,5 @@ $(document).ready(function () {
     }
   };
 
-  console.log('Maps Js Loaded and Initialized');
+  debug_log('Maps Js Loaded and Initialized');
 });
