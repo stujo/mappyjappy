@@ -143,7 +143,7 @@ $(document).ready(function () {
       var map_options = {
         center: position,
         zoom: 15,
-        draggable: false,
+        draggable: true,
         keyboardShortcuts: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false,
