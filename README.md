@@ -2,7 +2,7 @@ MappyJappy!
 ===============
 
 
-A jQuery based demo app for Google Maps
+A jQuery based demo rails app with Google maps and geolocation
 
 
 #Usage
@@ -11,6 +11,4 @@ A jQuery based demo app for Google Maps
 * rake db:create
 
 #How
-
-*  jquery plugin Gmap3: [http://gmap3.net/](http://gmap3.net/)
 
