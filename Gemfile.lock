@@ -68,6 +68,7 @@ GEM
     mime-types (1.25.1)
     minitest (5.3.4)
     multi_json (1.10.1)
+    newrelic_rpm (3.8.1.221)
     pg (0.17.1)
     polyglot (0.3.4)
     pry (0.9.12.6)
@@ -157,6 +158,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   meta_request
+  newrelic_rpm
   pg
   pry-byebug
   pry-rails

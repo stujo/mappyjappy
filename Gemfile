@@ -64,6 +64,8 @@ end
 gem "geocoder"
 
 
+gem 'newrelic_rpm'
+
 
 
 
